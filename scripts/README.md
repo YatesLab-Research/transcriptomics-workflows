@@ -35,13 +35,19 @@ bash fastqc_pe.sh
 Edit paths inside 'fastqc_pe.sh':
 
 -```BASE_DIR``` – Folder with raw FASTQ files
+
 -```FASTQC_OUT``` – Output path for FastQC reports
+
 -```MULTIQC_OUT``` – Output path for MultiQC report
 
 **What it does:**
+
  -Detects PE files and verifies mate pairs
+ 
  -Runs FastQC on valid PE reads
+ 
  -Logs missing or unmatched files to ```missing_or_mispaired_pe.log```
+ 
  -Summarizes results via MultiQC
 
 ## 🔬 2. Single-End QC
