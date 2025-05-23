@@ -238,7 +238,8 @@ multiqc /path/to/hisat2_alignment_pe  -o /path/to/hisat2_alignment_pe/multiqc
 multiqc /path/to/hisat2_alignment_se  -o /path/to/hisat2_alignment_se/multiqc
 ```
 
-**## Bonus**
+## Bonus
+
 ## 🧬 HISAT2 RNA-seq Alignment: Key Parameters
 
 | Parameter             | Description                                   | Paired-End | Single-End | Recommended Value / Notes                          |
