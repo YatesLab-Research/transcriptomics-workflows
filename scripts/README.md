@@ -21,9 +21,9 @@ Install via Conda (recommended):
 conda install -c bioconda fastqc multiqc
 ```
 
-🧪 **Usage**
+## 🧪 **Usage**
 
-🧬 ## 1. Paired-End QC
+## 🧬 1. Paired-End QC
 Use when your FASTQ filenames follow a paired convention (e.g.,```_R1/_R2``` or```_1/_2```).
 
 ```bash
@@ -37,7 +37,7 @@ Edit paths inside 'fastqc_PE.sh':
 
 -```MULTIQC_OUT``` – Output path for MultiQC report
 
-What it does:
+**What it does:**
 
  -Detects PE files and verifies mate pairs
 
@@ -48,7 +48,7 @@ What it does:
  -Summarizes results via MultiQC
 
 
-🔬 ## 2. Single-End QC
+## 🔬 2. Single-End QC
 Use when you have only one FASTQ file per sample.
 
 ```bash
@@ -68,20 +68,18 @@ Edit paths inside 'fastqc_SE.sh':
 
 -Summarizes results with MultiQC
 
-📊 ## Output
+##📊  Output
 Each script generates:
 
  - FastQC Reports: HTML and zipped summaries
 
- - MultiQC Summary:
-    -multiqc_report.html
+ - MultiQC Summary: ```multiqc_report.html```
 
  - Log files:
+   -```missing_or_mispaired_pe.log```
+   -```ignored_nonfastq_se.log```
 
-   -missing_or_mispaired_pe.log
-   -ignored_nonfastq_se.log
-
-🧼 Cleanup
+##🧼 Cleanup
 To remove all outputs before a fresh run:
 ```bash
 rm -rf /path/to/output/fastqc_pe /path/to/output/multiqc_pe
