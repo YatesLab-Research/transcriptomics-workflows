@@ -274,5 +274,156 @@ multiqc /path/to/hisat2_alignment_se  -o /path/to/hisat2_alignment_se/multiqc
 | `hisat2_alignment_summary.csv` | Combined summary table for downstream plotting |
 | `hisat2_alignment_summary.log` | Human-readable combined summary          |
 
+---
+# 🧬 RNA-seq Gene Quantification with featureCounts
 
+This module performs gene-level quantification from aligned RNA-seq reads (BAM files) using [`featureCounts`](http://bioinf.wehi.edu.au/featureCounts/), part of the **Subread** package.
+
+---
+
+## 📦 Requirements
+
+Install via Conda:
+
+```bash
+conda install -c bioconda subread
+```
+## 🗂 Input Requirements
+-Sorted BAM files from HISAT2 (PE or SE)
+-GTF annotation file matching the reference genome
+
+> 🔗 Download GTF from GENCODE: https://www.gencodegenes.org
+
+Example:
+
+```bash
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_45/gencode.v45.annotation.gtf.gz
+gunzip gencode.v45.annotation.gtf.gz
+```
+
+## 🚀 How to Run
+Edit and run the provided script:
+
+```bash
+bash run_featurecounts.sh
+```
+
+##📄 Output
+-`gene_counts.txt`: Count matrix for downstream tools (e.g. DESeq2)
+-Columns:
+  -Gene ID
+  -Read counts per sample
+
+## 📌 Best Practices
+-Always match the GTF file to the reference genome used during alignment.
+-Use the correct strandness (`-s`) setting (	`0`, `1`, or `2`) — check with your sequencing provider or tools like `RSeQC`.
+-Use sorted and indexed BAMs from HISAT2.
+
+---
+
+# 🧭 What's Next: Downstream Analysis in R
+
+This marks the **end of the Bash-based RNA-seq processing pipeline**.
+
+All upstream steps — quality control, trimming, alignment, and gene-level quantification — have been completed.
+
+The **next stage** involves downstream statistical and biological analysis in **R**.
+
+---
+
+## 📊 Downstream Analysis in R (Suggestions)
+
+| Goal                        | R Tool / Package     | Description                                               |
+|-----------------------------|----------------------|-----------------------------------------------------------|
+| Differential expression     | **DESeq2** / **edgeR** | Identify up/down-regulated genes between sample groups   |
+| Visualization               | **ggplot2**, **pheatmap**, **ComplexHeatmap** | Volcano plots, heatmaps, PCA                              |
+| Data normalization          | **DESeq2**, **limma-voom** | Normalize raw counts to account for library size          |
+| Gene annotation             | **biomaRt**, **org.Hs.eg.db** | Map Ensembl IDs to gene symbols, pathways, etc.         |
+| Pathway enrichment          | **clusterProfiler**, **fgsea**, **GSEA** | Explore functional implications of DE genes              |
+| Quality assessment (PCA, clustering) | **DESeq2**, **Rtsne**, **PCAtools** | Detect batch effects, sample relationships               |
+
+---
+
+# 🎯 DESeq2 Differential Expression Analysis Pipeline
+
+This pipeline performs differential gene expression analysis using **DESeq2** with support for:
+- 🧬 Batch effect correction
+- 🔁 Custom contrast group comparisons
+- 🏷 Gene annotation via biomaRt
+- 📈 Publication-quality plots (MA, Volcano, Heatmap, PCA)
+- 🧮 Summary of DE gene counts
+
+---
+
+## ⚙️ Requirements
+
+Install required packages (first-time only):
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install(c("DESeq2", "EnhancedVolcano", "biomaRt", "pheatmap", "RColorBrewer", "ggplot2"))
+```
+
+## 📂 File Structure
+
+```bash
+project/
+├── data/
+│   ├── gene_counts.txt       # from featureCounts
+│   └── metadata.tsv          # sample metadata (with 'condition' and 'batch')
+├── deseq2_analysis_advanced.R
+├── run_deseq2.sh
+└── results/
+    └── <your_run_name>/
+        ├── deseq2_results_treatment_vs_control.csv
+        ├── deseq2_results_annotated_treatment_vs_control.csv
+        ├── de_gene_summary.txt
+        └── figures/
+            ├── ma_plot.png/.pdf
+            ├── volcano_plot.png/.pdf
+            ├── heatmap_top30.png/.pdf
+            └── pca_plot.png/.pdf
+```
+
+## 🚀 How to Run
+
+```bash
+bash run_deseq2.sh \
+  -c data/gene_counts.txt \
+  -m data/metadata.tsv \
+  -r deseq2_analysis_advanced.R \
+  -o results/my_analysis_run \
+  --groupA treatment \
+  --groupB control
+```
+
+## 📊 Output Summary
+
+| File                                      | Description                                                    |
+| ----------------------------------------- | -------------------------------------------------------------- |
+| `deseq2_results_<A>_vs_<B>.csv`           | DESeq2 base results                                            |
+| `deseq2_results_annotated_<A>_vs_<B>.csv` | With HGNC symbols & gene descriptions                          |
+| `de_gene_summary.txt`                     | Count of upregulated, downregulated, and not significant genes |
+| `figures/*.png/.pdf`                      | MA, Volcano, Heatmap, PCA — publication-ready                  |
+
+
+## 📝 Metadata Format
+
+Tab-separated .tsv with headers:
+
+```tsv
+sample	condition	batch
+Sample1	control	Batch1
+Sample2	control	Batch1
+Sample3	control	Batch2
+Sample4	treatment	Batch1
+Sample5	treatment	Batch2
+Sample6	treatment	Batch2
+```
+
+## 📌 Notes
+-Adjust ```--groupA``` and ```--groupB``` to test other conditions.
+-Supports batch correction automatically via ```design = ~ batch + condition```.
+-Set input/output paths flexibly via CLI.
+-All visual outputs saved in both PNG and PDF formats.
 
