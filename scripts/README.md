@@ -68,7 +68,7 @@ Edit paths inside 'fastqc_se.sh':
 
 -Summarizes results with MultiQC
 
-##📊  Output
+## 📊  Output
 Each script generates:
 
  - FastQC Reports: HTML and zipped summaries
@@ -79,7 +79,7 @@ Each script generates:
    -```missing_or_mispaired_pe.log```
    -```ignored_nonfastq_se.log```
 
-##🧼 Cleanup
+## 🧼 Cleanup
 To remove all outputs before a fresh run:
 ```bash
 rm -rf /path/to/output/fastqc_se /path/to/output/multiqc_se
