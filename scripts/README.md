@@ -8,18 +8,6 @@ This repository contains modular scripts to run quality control (QC) on RNA-seq 
 
 ---
 
-## 📁 Folder Structure
-
-.
-├── fastqc_pe.sh # PE QC script with auto-detection and logging
-├── fastqc_se.sh # SE QC script with basic filtering and logging
-├── missing_or_mispaired_pe.log # Log of PE reads missing their mate
-├── ignored_nonfastq_se.log # Log of SE files that were skipped
-└── README.md
-
-
----
-
 ## 🔧 Requirements
 
 Install and ensure the following tools are in your `$PATH`:
@@ -32,17 +20,50 @@ Install via Conda (recommended):
 ```bash
 conda install -c bioconda fastqc multiqc
 ```
-Edit paths inside fastqc_se.sh:
 
--BASE_DIR, FASTQC_OUT, MULTIQC_OUT, LOG_FILE
+🧪 Usage
+🧬 1. Paired-End QC
+Use when your FASTQ filenames follow a paired convention (e.g.,'_R1/_R2 or _1/_2').
+
+```bash
+bash fastqc_PE.sh
+```
+Edit paths inside 'fastqc_PE.sh':
+
+-'BASE_DIR' – Folder with raw FASTQ files
+
+-'FASTQC_OUT' – Output path for FastQC reports
+
+-'MULTIQC_OUT' – Output path for MultiQC report
+
+What it does:
+
+ -Detects PE files and verifies mate pairs
+
+ -Runs FastQC on valid PE reads
+
+ -Logs missing or unmatched files to 'missing_or_mispaired_PE.log'
+
+ -Summarizes results via MultiQC
+
+
+🔬 2. Single-End QC
+Use when you have only one FASTQ file per sample.
+
+```bash
+bash fastqc_SE.sh
+```
+Edit paths inside 'fastqc_SE.sh':
+
+-'BASE_DIR', 'FASTQC_OUT', 'MULTIQC_OUT', 'LOG_FILE'
 
 What it does:
 
 -Runs FastQC on all SE reads
 
--Skips _R2 or _2 files
+-Skips '_R2' or '_2' files
 
--Logs ignored files to ignored_nonfastq_se.log
+-Logs ignored files to 'ignored_nonfastq_SE.log'
 
 -Summarizes results with MultiQC
 
@@ -52,13 +73,12 @@ Each script generates:
  - FastQC Reports: HTML and zipped summaries
 
  - MultiQC Summary:
- -      -multiqc_report.html
+    -multiqc_report.html
 
  - Log files:
 
-        -missing_or_mispaired_pe.log
-
-        -ignored_nonfastq_se.log
+   -missing_or_mispaired_pe.log
+   -ignored_nonfastq_se.log
 
 🧼 Cleanup
 To remove all outputs before a fresh run:
