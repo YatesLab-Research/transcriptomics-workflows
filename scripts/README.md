@@ -153,3 +153,88 @@ output_dir/
 # Single-end trimming
 ./fastp_se_full.sh
 ```
+---
+
+# 🧬 RNA-seq Alignment with HISAT2
+
+This section describes how to align trimmed RNA-seq reads to a reference genome using HISAT2. Both paired-end and single-end pipelines are supported, with alignment statistics logged for downstream analysis and MultiQC integration.
+
+## Requirements
+
+Install tools via Conda:
+
+```bash
+conda install -c bioconda hisat2 samtools multiqc
+```
+
+## Prepare the Reference Genome
+
+Download a reference genome FASTA and annotation (GTF) file, e.g., from GENCODE.
+Example:
+
+```bash
+# Download
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_45/GRCh38.primary_assembly.genome.fa.gz
+gunzip GRCh38.primary_assembly.genome.fa.gz
+
+# Build HISAT2 index
+hisat2-build -p 8 GRCh38.primary_assembly.genome.fa genome_index/genome
+```
+This will create a ```genome_index/``` folder containing ```.ht2``` files. Use the path to the index base (```genome_index/genome```) in the scripts below.
+
+
+## 🔁 1. Paired-End Alignment
+
+Script: ```hisat2_align_pe.sh```
+
+```bash
+bash hisat2_align_pe.sh
+```
+
+**What it does:**
+-Aligns PE reads (```_R1```/```_R2```) from fastp
+-Outputs sorted ```.bam``` and ```.bai``` files
+-Logs alignment statistics for each sample
+-Compiles a combined ```.log``` and ```.csv``` file
+-Supports MultiQC log detection
+
+**Edit inside script:**
+-```TRIMMED_DIR```: path to your PE trimmed FASTQs
+-```HISAT2_INDEX```: base path to HISAT2 index
+-```OUT_DIR```: where outputs go
+
+## 🔁 2. Single-End Alignment
+Script: hisat2_align_se.sh
+
+```bash
+bash hisat2_align_se.sh
+```
+
+**Edit inside script:**
+
+-```TRIMMED_DIR```, ```HISAT2_INDEX```, and ```OUT_DIR```
+
+## 📊 Output Structure
+
+Each alignment script will generate:
+
+```
+hisat2_alignment_*/                     # PE or SE
+├── sample1.sorted.bam                  # Aligned, sorted reads
+├── sample1.sorted.bam.bai              # BAM index
+├── hisat2_alignment_summary.csv        # CSV for downstream plotting
+├── hisat2_alignment_summary.log        # Combined readable summary
+├── logs/                               # MultiQC-compatible logs
+│   ├── sample1_hisat2.log
+│   └── sample2_hisat2.log
+```
+
+## 📈 MultiQC Integration
+
+After alignment, run:
+
+```bash
+multiqc /path/to/hisat2_alignment_pe  -o /path/to/hisat2_alignment_pe/multiqc
+multiqc /path/to/hisat2_alignment_se  -o /path/to/hisat2_alignment_se/multiqc
+
+```
