@@ -236,5 +236,42 @@ After alignment, run:
 ```bash
 multiqc /path/to/hisat2_alignment_pe  -o /path/to/hisat2_alignment_pe/multiqc
 multiqc /path/to/hisat2_alignment_se  -o /path/to/hisat2_alignment_se/multiqc
-
 ```
+
+**## Bonus**
+## 🧬 HISAT2 RNA-seq Alignment: Key Parameters
+
+| Parameter             | Description                                   | Paired-End | Single-End | Recommended Value / Notes                          |
+|-----------------------|-----------------------------------------------|------------|------------|----------------------------------------------------|
+| `-x`                  | Path to HISAT2 index basename                 | ✅         | ✅         | e.g. `genome_index/genome` (omit `.ht2` extension) |
+| `-1/-2`               | Input R1 and R2 reads                         | ✅         | ❌         | `/path/sample_R1.fastq.gz`, `/path/sample_R2.fastq.gz` |
+| `-U`                  | Input for single-end reads                    | ❌         | ✅         | `/path/sample.fastq.gz`                            |
+| `-p`                  | Number of threads                             | ✅         | ✅         | 4–16 (depending on machine)                        |
+| `--dta`               | Optimize for transcript assembly              | ✅         | ✅         | Always recommended for RNA-seq                     |
+| `--rna-strandness`    | Strand-specific protocol setting              | ✅         | ✅         | `RF`, `FR`, `R`, `F` (depends on library prep)     |
+| `--summary-file`      | Write per-sample alignment stats              | ✅         | ✅         | Used for logging & MultiQC                         |
+| `| samtools sort`     | Pipe to sort BAM output                       | ✅         | ✅         | Required for downstream tools                      |
+| `samtools index`      | Create BAM index (`.bai`)                     | ✅         | ✅         | Required for IGV and counting                      |
+
+
+## 📌 Common Values for `--rna-strandness`
+
+| Library Type (Protocol)   | `--rna-strandness` Value | Notes                              |
+|---------------------------|--------------------------|------------------------------------|
+| TruSeq Stranded / dUTP    | `RF`                     | Most common in Illumina RNA-seq    |
+| Illumina Unstranded       | *omit flag*              | Default                            |
+| Reverse (3′ → 5′)         | `R`                      | Use with single-end libraries      |
+| Forward (5′ → 3′)         | `F`                      | Use with single-end libraries      |
+
+## 🧪 Output Files to Expect
+
+| Output Type       | Description                                         |
+|-------------------|-----------------------------------------------------|
+| `sample.sorted.bam` | Sorted alignments ready for quantification         |
+| `sample.sorted.bam.bai` | BAM index for IGV and featureCounts             |
+| `sample_hisat2.log` | Per-sample HISAT2 log (alignment stats)           |
+| `hisat2_alignment_summary.csv` | Combined summary table for downstream plotting |
+| `hisat2_alignment_summary.log` | Human-readable combined summary          |
+
+
+
