@@ -1,6 +1,9 @@
-# RNA-seq Quality Control Pipeline (FastQC + MultiQC)
+# RNA-seq Data Analysis Workflow 
+---
 
-This repository contains modular scripts to run quality control (QC) on RNA-seq data using **FastQC** and **MultiQC**, with support for:
+# RNA-seq Quality Control (FastQC + MultiQC)
+
+This repository contains modular scripts (```fastqc_pe.sh ``` & ```fastqc_se.sh ```) to run quality control (QC) on RNA-seq data using **FastQC** and **MultiQC**, with support for:
 
 - **Paired-end (pe)** read detection
 - **Single-end (se)** read analysis
