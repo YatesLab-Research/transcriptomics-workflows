@@ -32,7 +32,7 @@ Use when your FASTQ filenames follow a paired convention (e.g.,```_R1/_R2``` or`
 ```bash
 bash fastqc_pe.sh
 ```
-Edit paths inside 'fastqc_pe.sh':
+**Edit paths inside 'fastqc_pe.sh':**
 
 -```BASE_DIR``` – Folder with raw FASTQ files
 
