@@ -397,6 +397,9 @@ bash run_deseq2.sh \
   --groupB control
 ```
 
+###❗ Important Reminders
+> The values you use for `--groupA` and `--groupB` must match exactly the `condition` values in your `metadata.tsv` file (case-sensitive).
+
 ## 📊 Output Summary
 
 | File                                      | Description                                                    |
@@ -422,7 +425,7 @@ Sample6	treatment	Batch2
 ```
 
 ## 📌 Notes
--Adjust ```--groupA``` and ```--groupB``` to test other conditions.
+-Adjust ```--groupA``` and ```--groupB``` to test other conditions such as `Healthy` vs `disease` etc.
 
 -Supports batch correction automatically via ```design = ~ batch + condition```.
 
