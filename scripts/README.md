@@ -423,7 +423,10 @@ Sample6	treatment	Batch2
 
 ## 📌 Notes
 -Adjust ```--groupA``` and ```--groupB``` to test other conditions.
+
 -Supports batch correction automatically via ```design = ~ batch + condition```.
+
 -Set input/output paths flexibly via CLI.
+
 -All visual outputs saved in both PNG and PDF formats.
 
