@@ -1,8 +1,8 @@
-# RNA-seq Quality Control Piseline (FastQC + MultiQC)
+# RNA-seq Quality Control Pipeline (FastQC + MultiQC)
 
 This repository contains modular scripts to run quality control (QC) on RNA-seq data using **FastQC** and **MultiQC**, with support for:
 
-- **Paired-end (se)** read detection
+- **Paired-end (pe)** read detection
 - **Single-end (se)** read analysis
 - **Automated logging** of missing or mispaired files
 
@@ -27,11 +27,11 @@ conda install -c bioconda fastqc multiqc
 Use when your FASTQ filenames follow a paired convention (e.g.,```_R1/_R2``` or```_1/_2```).
 
 ```bash
-bash fastqc_se.sh
+bash fastqc_pe.sh
 ```
-Edit paths inside 'fastqc_se.sh':
+Edit paths inside 'fastqc_pe.sh':
 
--```BAse_DIR``` – Folder with raw FASTQ files
+-```BASE_DIR``` – Folder with raw FASTQ files
 
 -```FASTQC_OUT``` – Output path for FastQC reports
 
@@ -39,28 +39,28 @@ Edit paths inside 'fastqc_se.sh':
 
 **What it does:**
 
- -Detects se files and verifies mate pairs
+ -Detects PE files and verifies mate pairs
 
- -Runs FastQC on valid se reads
+ -Runs FastQC on valid PE reads
 
- -Logs missing or unmatched files to ```missing_or_mispaired_se.log```
+ -Logs missing or unmatched files to ```missing_or_mispaired_pe.log```
 
  -Summarizes results via MultiQC
 
 
 ## 🔬 2. Single-End QC
-Use when you have only one FASTQ file ser sample.
+Use when you have only one FASTQ file per sample.
 
 ```bash
 bash fastqc_se.sh
 ```
 Edit paths inside 'fastqc_se.sh':
 
--```BAse_DIR```, ```FASTQC_OUT```, ```MULTIQC_OUT```, ```LOG_FILE```
+-```BASE_DIR```, ```FASTQC_OUT```, ```MULTIQC_OUT```, ```LOG_FILE```
 
 **What it does:**
 
--Runs FastQC on all se reads
+-Runs FastQC on all SE reads
 
 -Skips ```_R2``` or ```_2``` files
 
@@ -71,12 +71,12 @@ Edit paths inside 'fastqc_se.sh':
 ##📊  Output
 Each script generates:
 
- - FastQC Reports: HTML and zipsed summaries
+ - FastQC Reports: HTML and zipped summaries
 
  - MultiQC Summary: ```multiqc_report.html```
 
  - Log files:
-   -```missing_or_mispaired_se.log```
+   -```missing_or_mispaired_pe.log```
    -```ignored_nonfastq_se.log```
 
 ##🧼 Cleanup
@@ -86,4 +86,4 @@ rm -rf /path/to/output/fastqc_se /path/to/output/multiqc_se
 rm -rf /path/to/output/fastqc_se /path/to/output/multiqc_se
 rm missing_or_mispaired_se.log ignored_nonfastq_se.log
 ```
-
+> The RNA-seq data quality control was performed using custom Bash scripts built around FastQC and MultiQC.
